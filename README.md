@@ -1,6 +1,7 @@
 # mycode
 Tracking my code
 I am a student learning python as well as other network development related information, and I intend on pursuing a Bachelor's and then a Master's in Cybersecurity
+I want to learn how to version control projects with git.
 
 ## Getting Started
 These instructions will get you a copy of the project up and running on your local machine
