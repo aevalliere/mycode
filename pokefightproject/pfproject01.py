@@ -169,9 +169,9 @@ showInstructions()
 #Give Description of the rpg
 print("\nYou want to be the very best that no one ever was, and you want to do it by yourself.\nYou are planning on going on an adventure in which you will fight pokemon with your own two hands.\nYou are not some 12 year old that has to save the world because apparently all the adults are incompetent.\nYou just want to show the pokemon who the boss is around these parts.\nDo you have what it takes to be the human pokemon master?")
 
-def clear():
+#def clear():
     # check and make call for specific operating system
-    _ = call('clear' if osname =='posix' else 'cls')
+   # _ = call('clear' if osname =='posix' else 'cls')
 
 bestiary = [{'name' : 'Caterpie', 'health' : 45, 'damage' : '30'},
             {'name' : 'Geodude', 'health' : 40, 'damage' : '80'},
@@ -191,7 +191,7 @@ bestiary = [{'name' : 'Caterpie', 'health' : 45, 'damage' : '30'},
             ]
 
 playerstrength = 30
-player_health = 300
+player_health = 150
 #inventory = []
 def combat():
     try:
@@ -218,18 +218,31 @@ def combat():
                 if "fist" in inventory and move[1] == 'fist': # checks if weapon is in your inventory
                     print(f"You hit a {bestiary[monster_ID]['name']} for {playerstrength} damage!")
                     try:
-                         monster_health -= int(playerstrength)
+                        player_health -= int(monster_damage)
+                        monster_health -= int(playerstrength)
                     except:
                         pass
-                    if monster_health <= 0:
-                        print(f"The {bestiary[monster_ID]['name']} has been knocked out.\n")
+                    if monster_health <= 0 and player_health <= 0:
+                        print(f"\nThe {bestiary[monster_ID]['name']} and you knocked each other out. You are taken to a nearby hospital to be treated. When you return the enemy is nowhere to be seen. You count this as your victory.\n")
                         del rooms[currentRoom]['monster']
+                        player_health = 150
+                        showStatus()
+                        break
+                    elif monster_health <= 0:
+                        print(f"\nThe {bestiary[monster_ID]['name']} has been knocked out.\n")
+                        del rooms[currentRoom]['monster']
+                        showStatus()
+                        break
+                    elif player_health <= 0:
+                        print(f"\nThe {bestiary[monster_ID]['name']} has knocked you out. You are taken to the nearest hospital and wait to heal.\n")
+                        player_health = 150
+                        showStatus()
                         break
 
                     print(f"A {bestiary[monster_ID]['name']} hits you for {monster_damage} damage!")
                     print ("=========================\n")
 
-                    player_health -= int(monster_damage)
+                    # player_health -= int(monster_damage)
                 if 'potion' in inventory and move[1] == 'potion':
                     print("You drink from the potion. Your health has been restored!")
                     print("Your potion magically refills itself! Handy!")
@@ -268,16 +281,15 @@ while True:
         #Must fight pokemon
         if 'monster' in rooms[currentRoom]:
             print (f"A {bestiary[monster_ID]['name']} is in the way")
+        elif 'boulder badge' and 'cascade badge' and 'thunder badge' and 'rainbow badge' and 'soul badge' and 'marsh badge' and 'volcano badge' and 'earth badge' not in inventory and currentRoom == 'Viridian City' and move[1] == 'west':
+            print('You are only allowed past this point once you have collected all eight gym badges.')
+            currentRoom == 'Viridian City'
+        elif move[1] in rooms[currentRoom]:
+            #set the current room to the new room
+            currentRoom = rooms[currentRoom][move[1]]
+            #there is no door (link) to the new room
         else:
-           # if 'boulder badge' and 'cascade badge' and 'thunder badge' and 'rainbow badge' and 'soul badge' and 'marsh badge' and 'volcano badge' and 'earth badge' not in inventory and rooms[currentRoom] == 'Viridian City' and move[1] == 'west':
-            #    print('You are only allowed past this point once you have collected all eight gym badges.')
-            #   currentRoom = 'Viridian City'
-            if move[1] in rooms[currentRoom]:
-                #set the current room to the new room
-                currentRoom = rooms[currentRoom][move[1]]
-                #there is no door (link) to the new room
-            else:
-                print('You can\'t go that way!')
+            print('You can\'t go that way!')
 
     #if they type 'get' first
     if move[0] == 'get' :
