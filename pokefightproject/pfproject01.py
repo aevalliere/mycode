@@ -2,8 +2,13 @@
 
 def  showInstructions():
   #print a main menu and the commands
-  print('''
-Pokefighter
+    print('''
+  ____       _         __ _       _     _            
+ |  _ \ ___ | | _____ / _(_) __ _| |__ | |_ ___ _ __ 
+ | |_) / _ \| |/ / _ \ |_| |/ _` | '_ \| __/ _ \ '__|
+ |  __/ (_) |   <  __/  _| | (_| | | | | ||  __/ |   
+ |_|   \___/|_|\_\___|_| |_|\__, |_| |_|\__\___|_|   
+                            |___/                        
 ===========
 Commands:
   go [direction]
@@ -14,7 +19,7 @@ Commands:
 def showStatus():
   #print the player's current status
   print('---------------------------')
-  print('You are in the ' + currentRoom)
+  print(currentRoom)
   print(rooms[currentRoom]['desc'])
   #print the current inventory
   print('Inventory: ' + str(inventory))
@@ -169,10 +174,6 @@ showInstructions()
 #Give Description of the rpg
 print("\nYou want to be the very best that no one ever was, and you want to do it by yourself.\nYou are planning on going on an adventure in which you will fight pokemon with your own two hands.\nYou are not some 12 year old that has to save the world because apparently all the adults are incompetent.\nYou just want to show the pokemon who the boss is around these parts.\nDo you have what it takes to be the human pokemon master?")
 
-#def clear():
-    # check and make call for specific operating system
-   # _ = call('clear' if osname =='posix' else 'cls')
-
 bestiary = [{'name' : 'Caterpie', 'health' : 45, 'damage' : '30'},
             {'name' : 'Geodude', 'health' : 40, 'damage' : '80'},
             {'name' : 'Clefairy', 'health' : 70, 'damage' : '45'},
@@ -191,12 +192,11 @@ bestiary = [{'name' : 'Caterpie', 'health' : 45, 'damage' : '30'},
             ]
 
 playerstrength = 30
-player_health = 150
+player_health = 200
 #inventory = []
 def combat():
     try:
         global player_health, inventory, bestiary
-        round = 1
         bestiaryentry = rooms[currentRoom]['monster']
         monster_ID = int(bestiaryentry)
         monster_health = bestiary[monster_ID]['health']
@@ -225,7 +225,7 @@ def combat():
                     if monster_health <= 0 and player_health <= 0:
                         print(f"\nThe {bestiary[monster_ID]['name']} and you knocked each other out. You are taken to a nearby hospital to be treated. When you return the enemy is nowhere to be seen. You count this as your victory.\n")
                         del rooms[currentRoom]['monster']
-                        player_health = 150
+                        player_health = 200
                         showStatus()
                         break
                     elif monster_health <= 0:
@@ -235,7 +235,7 @@ def combat():
                         break
                     elif player_health <= 0:
                         print(f"\nThe {bestiary[monster_ID]['name']} has knocked you out. You are taken to the nearest hospital and wait to heal.\n")
-                        player_health = 150
+                        player_health = 200
                         showStatus()
                         break
 
@@ -246,7 +246,7 @@ def combat():
                 if 'potion' in inventory and move[1] == 'potion':
                     print("You drink from the potion. Your health has been restored!")
                     print("Your potion magically refills itself! Handy!")
-                    if player_health <=200:
+                    if player_health <= 200:
                         player_health += 100
                     else:
                         player_health += 30
@@ -281,9 +281,14 @@ while True:
         #Must fight pokemon
         if 'monster' in rooms[currentRoom]:
             print (f"A {bestiary[monster_ID]['name']} is in the way")
+        #Setting standard prerequisites before attempting elite four
         elif 'boulder badge' and 'cascade badge' and 'thunder badge' and 'rainbow badge' and 'soul badge' and 'marsh badge' and 'volcano badge' and 'earth badge' not in inventory and currentRoom == 'Viridian City' and move[1] == 'west':
             print('You are only allowed past this point once you have collected all eight gym badges.')
             currentRoom == 'Viridian City'
+        #Making it so The path is more forced in beginning
+        elif 'volcano badge' not in inventory and currentRoom == 'Pallet Town' and move[1] == 'south':
+            print('A beautiful body of water lies in front of you, it\'s a shame you have no way to cross it.')
+            currentRoom == 'Pallet Town'
         elif move[1] in rooms[currentRoom]:
             #set the current room to the new room
             currentRoom = rooms[currentRoom][move[1]]
@@ -311,9 +316,9 @@ while True:
     
     if move[0].lower() == 'use':
         if move[1].lower() == 'potion' and 'potion' in inventory:
-            print("You drink from the potion. Your health has been restored!")
-            print("Your potion magically refills itself! Handy!")
-            player_health = 300
+            print("You drink a potion originally meant for a pokemon. It\'s super effective!")
+            print("You have plenty of potion left in the sprayer for later!")
+            player_health = 200
         else:
             print("You can\'t use that.")
     
